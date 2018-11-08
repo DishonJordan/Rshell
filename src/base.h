@@ -1,7 +1,7 @@
 #pragma once
 
-class Rshell_Base {
+class Base {
   public:
-    Rshell_Base() {}
+    Base() {}
     virtual bool execute() = 0;
 };    
