@@ -33,4 +33,8 @@ class Command : public Base {
     
     	return 1;
     }
+
+	void add(char* c) {
+		cmd.push_back(c);
+	}
 };

@@ -14,7 +14,7 @@ private:
 	vector<int> op_index;
 
 public:
-	ExpressionBuilder(vector<string> commands) {
+	ExpressionBuilder(vector<string> commands) { //Populates input and op_index
 
 		input = commands;
 
@@ -43,7 +43,7 @@ public:
 
 			//Assigning all strings in input to the new command and returning it
 			for (unsigned int i = 0; i < input.size(); i++)
-				c->add(input[i]);
+				c->add(const_cast<char*>(input[i].c_str()));
 
 			return c;
 
@@ -63,12 +63,12 @@ public:
 
 			//Assigning all strings in input to the new command
 			for (int i = op_index[op_index.size() - 1] + 1; i < input.size(); i++)
-				command->add(input[i]);
+				command->add(const_cast<char*>(input[i].c_str()));
 
 			//Assigning that command to the right node of top
 			top->r_node = command;
 
-			//Calling a recusrive helper function to finish the rest of the tree
+			//Calling a recurs ive helper function to finish the rest of the tree
 			add_children(top, op_index.size() - 2, op_index.size() - 1);
 
 		}
@@ -79,11 +79,11 @@ public:
 	void add_children(Operator* parent, int left_index, int right_index) {
 
 
-		if (left_index < 0) { //Base case: We are at the first command
+		if (left_index < 0) { //Base case: The last command of the tree
 
 			Command* first_command = new Command();
 			for (int i = 0; i < op_index[right_index]; i++)
-				first_command->add(input[i]);
+				first_command->add(const_cast<char*>(input[i].c_str()));
 
 			parent->l_node = first_command;
 
@@ -103,7 +103,7 @@ public:
 
 		//Assigning all strings in input to the new command
 		for (int i = op_index[left_index] + 1; i < op_index[right_index]; i++)
-			command->add(input[i]);
+			command->add(const_cast<char*>(input[i].c_str()));
 
 		//Assigning that command to the right node of op
 		op->r_node = command;
