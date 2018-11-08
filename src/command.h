@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -24,13 +25,15 @@ class Command : public Base {
     bool execute() {
 	/* create the child */
         pid_t pid = fork();
-	
-	/* override the child process */
-	execvp(cmd[0], cmd.data());
 
-	/* wait for the child process */
+	/* override the child process */
+	if (pid == 0) {
+	    execvp(cmd[0], cmd.data());
+	}
+
+        /* wait for the child to terminate */
 	waitpid(pid, NULL, 0);
-    
+  
     	return 1;
     }
 
