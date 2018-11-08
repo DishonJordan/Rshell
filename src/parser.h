@@ -52,8 +52,7 @@ public:
 			cptr = strtok(NULL, " ");
 
 		}
-
-
+		
 		return output;
 
 	}

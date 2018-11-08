@@ -23,12 +23,14 @@ class Command : public Base {
     Command(vector<char*> cmd) : Base(), cmd(cmd) {}
 
     bool execute() {
+	
 	/* create the child */
         pid_t pid = fork();
 
 	/* override the child process */
 	if (pid == 0) {
 	    execvp(cmd[0], cmd.data());
+	    cout << "Command Failed" << endl;
 	}
 
         /* wait for the child to terminate */

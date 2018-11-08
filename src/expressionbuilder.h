@@ -56,20 +56,23 @@ public:
 		else { // Initializing the top node
 
 			//Changing top into a Semicolon/And/Or based off of which one it is
-			if (input[op_index[op_index.size() - 1]].compare(";"))
+			if (input[op_index[op_index.size() - 1]].compare(";") == 0){
 				top = new Semicolon(); //Change to Semicolon
-			if (input[op_index[op_index.size() - 1]].compare("&&"))
+			}
+			else if (input[op_index[op_index.size() - 1]].compare("&&") == 0){
 				top = new And(); //Change to AND
-			if (input[op_index[op_index.size() - 1]].compare("||"))
+			}
+			else if (input[op_index[op_index.size() - 1]].compare("||") == 0){
 				top = new Or(); //Change to OR
+			}
 
 			//Creating a new command to hold the last command
 			Command* command = new Command();
 
 			//Assigning all strings in input, after the last command's index, to the command's char* vector
-			for (int i = op_index[op_index.size() - 1] + 1; i < input.size(); i++)
+			for (int i = op_index[op_index.size() - 1] + 1; i < input.size(); i++){
 				command->add(const_cast<char*>(input[i].c_str()));
-
+			}
 			//Assigning that command to the right node of top
 			top->setRightNode(command);
 
@@ -87,9 +90,9 @@ public:
 		if (left_index < 0) { //Base case: The last command of the tree
 
 			Command* first_command = new Command();
-			for (int i = 0; i < op_index[right_index]; i++)
+			for (int i = 0; i < op_index[right_index]; i++){
 				first_command->add(const_cast<char*>(input[i].c_str()));
-
+			}
 			parent->setLeftNode(first_command);
 
 			return;
@@ -97,18 +100,22 @@ public:
 		Operator* op = new Operator();
 
 		//Changing op into a Semicolon/And/Or based off of which one it is
-		if (input[op_index[right_index]].compare(";"))
+		if (input[op_index[right_index]].compare(";") == 0){
 			op = new Semicolon(); //Change to Semicolon
-		if (input[op_index[right_index]].compare("&&"))
+			}
+		else if (input[op_index[right_index]].compare("&&") == 0){
 			op = new And(); //Change to AND
-		if (input[op_index[right_index]].compare("||"))
+			}
+		else if (input[op_index[right_index]].compare("||") == 0){
 			op = new Or(); //Change to OR
+			}
 
 		Command* command = new Command();
 
 		//Assigning all strings in input to the new command
-		for (int i = op_index[left_index] + 1; i < op_index[right_index]; i++)
+		for (int i = op_index[left_index] + 1; i < op_index[right_index]; i++){
 			command->add(const_cast<char*>(input[i].c_str()));
+			}
 
 		//Assigning that command to the right node of op
 		op->setRightNode(command);
