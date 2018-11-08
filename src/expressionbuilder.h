@@ -45,9 +45,7 @@ public:
 
 			Command* c = new Command();
 
-			//Assigning all strings in input to the new command and returning it
-			for (unsigned int i = 0; i < input.size(); i++)
-				c->add(const_cast<char*>(input[i].c_str()));
+			PopulateCommand(0, input.size(), c);
 
 			return c;
 
@@ -55,28 +53,16 @@ public:
 		}
 		else { // Initializing the top node
 
-			//Changing top into a Semicolon/And/Or based off of which one it is
-			if (input[op_index[op_index.size() - 1]].compare(";") == 0){
-				top = new Semicolon(); //Change to Semicolon
-			}
-			else if (input[op_index[op_index.size() - 1]].compare("&&") == 0){
-				top = new And(); //Change to AND
-			}
-			else if (input[op_index[op_index.size() - 1]].compare("||") == 0){
-				top = new Or(); //Change to OR
-			}
+			top = CheckOperator(input[op_index[op_index.size() - 1]]);
 
 			//Creating a new command to hold the last command
 			Command* command = new Command();
 
-			//Assigning all strings in input, after the last command's index, to the command's char* vector
-			for (int i = op_index[op_index.size() - 1] + 1; i < input.size(); i++){
-				command->add(const_cast<char*>(input[i].c_str()));
-			}
+			PopulateCommand(op_index[op_index.size() - 1] + 1, input.size(), command);
+
 			//Assigning that command to the right node of top
 			top->setRightNode(command);
 
-			//Calling a recurs ive helper function to finish the rest of the tree
 			add_children(top, op_index.size() - 2, op_index.size() - 1);
 
 		}
@@ -84,38 +70,26 @@ public:
 
 	}
 
+	//Recursive function that builds the rest of the expression tree until there are no more operators and commands
 	void add_children(Operator* parent, int left_index, int right_index) {
 
 
 		if (left_index < 0) { //Base case: The last command of the tree
 
 			Command* first_command = new Command();
-			for (int i = 0; i < op_index[right_index]; i++){
-				first_command->add(const_cast<char*>(input[i].c_str()));
-			}
+
+			PopulateCommand(0, op_index[right_index], first_command);
+
 			parent->setLeftNode(first_command);
 
 			return;
 		}
-		Operator* op = new Operator();
 
-		//Changing op into a Semicolon/And/Or based off of which one it is
-		if (input[op_index[right_index]].compare(";") == 0){
-			op = new Semicolon(); //Change to Semicolon
-			}
-		else if (input[op_index[right_index]].compare("&&") == 0){
-			op = new And(); //Change to AND
-			}
-		else if (input[op_index[right_index]].compare("||") == 0){
-			op = new Or(); //Change to OR
-			}
+		Operator* op = CheckOperator(input[op_index[right_index]]);
 
 		Command* command = new Command();
 
-		//Assigning all strings in input to the new command
-		for (int i = op_index[left_index] + 1; i < op_index[right_index]; i++){
-			command->add(const_cast<char*>(input[i].c_str()));
-			}
+		PopulateCommand(op_index[left_index] + 1, op_index[right_index], command);
 
 		//Assigning that command to the right node of op
 		op->setRightNode(command);
@@ -127,5 +101,37 @@ public:
 		add_children(op, left_index - 1, right_index - 1);
 
 	}
+
+	//Checks which operator the given string is and returns the new object
+	Operator* CheckOperator(string s) {
+
+		if (s.compare(";") == 0) {
+			return new Semicolon();
+		}
+		else if (s.compare("&&") == 0) {
+			return new And();
+		}
+		else if (s.compare("||") == 0) {
+			return new Or();
+		}
+		else {
+			cout << "Did not match any Operator. Returning default." << endl;
+			return new Operator;
+		}
+
+	}
+
+	//Populates command's internal vector with the strings in the input between the given indicies, converts that string into a char*
+	void PopulateCommand(int initial_index, int final_index, Command* c) {
+
+			for (int i = initial_index; i < final_index; i++) {
+				c->add(const_cast<char*>(input[i].c_str()));
+			}
+
+		}
+
+
+
+	
 
 };
