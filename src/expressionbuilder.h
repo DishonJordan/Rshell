@@ -5,6 +5,10 @@
 #include "base.h"
 #include "operator.h"
 #include "command.h"
+#include "semicolon.h"
+#include "and.h"
+#include "or.h"
+
 
 using namespace std;
 
@@ -53,11 +57,11 @@ public:
 
 			//Changing top into a Semicolon/And/Or based off of which one it is
 			if (input[op_index[op_index.size() - 1]].compare(";"))
-				top = new Operator(); //Change to Semicolon
+				top = new Semicolon(); //Change to Semicolon
 			if (input[op_index[op_index.size() - 1]].compare("&&"))
-				top = new Operator(); //Change to AND
+				top = new And(); //Change to AND
 			if (input[op_index[op_index.size() - 1]].compare("||"))
-				top = new Operator(); //Change to OR
+				top = new Or(); //Change to OR
 
 			//Creating a new command to hold the last command
 			Command* command = new Command();
@@ -94,11 +98,11 @@ public:
 
 		//Changing op into a Semicolon/And/Or based off of which one it is
 		if (input[op_index[right_index]].compare(";"))
-			op = new Operator(); //Change to Semicolon
+			op = new Semicolon(); //Change to Semicolon
 		if (input[op_index[right_index]].compare("&&"))
-			op = new Operator(); //Change to AND
+			op = new And(); //Change to AND
 		if (input[op_index[right_index]].compare("||"))
-			op = new Operator(); //Change to OR
+			op = new Or(); //Change to OR
 
 		Command* command = new Command();
 
