@@ -2,9 +2,9 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
-#include "Base.h"
-#include "Operator.h"
-#include "Command.h"
+#include "base.h"
+#include "operator.h"
+#include "command.h"
 
 using namespace std;
 
@@ -49,7 +49,8 @@ public:
 
 
 		}
-		else {
+		else { // Initializing the top node
+
 			//Changing top into a Semicolon/And/Or based off of which one it is
 			if (input[op_index[op_index.size() - 1]].compare(";"))
 				top = new Operator(); //Change to Semicolon
@@ -61,12 +62,12 @@ public:
 			//Creating a new command to hold the last command
 			Command* command = new Command();
 
-			//Assigning all strings in input to the new command
+			//Assigning all strings in input, after the last command's index, to the command's char* vector
 			for (int i = op_index[op_index.size() - 1] + 1; i < input.size(); i++)
 				command->add(const_cast<char*>(input[i].c_str()));
 
 			//Assigning that command to the right node of top
-			top->r_node = command;
+			top->setRightNode(command);
 
 			//Calling a recurs ive helper function to finish the rest of the tree
 			add_children(top, op_index.size() - 2, op_index.size() - 1);
@@ -85,7 +86,7 @@ public:
 			for (int i = 0; i < op_index[right_index]; i++)
 				first_command->add(const_cast<char*>(input[i].c_str()));
 
-			parent->l_node = first_command;
+			parent->setLeftNode(first_command);
 
 			return;
 		}
@@ -106,10 +107,10 @@ public:
 			command->add(const_cast<char*>(input[i].c_str()));
 
 		//Assigning that command to the right node of op
-		op->r_node = command;
+		op->setRightNode(command);
 
 		//Assigning the left node of the parent Operator to op
-		parent->l_node = op;
+		parent->setLeftNode(op);
 
 		//Recurse with the left node 
 		add_children(op, left_index - 1, right_index - 1);

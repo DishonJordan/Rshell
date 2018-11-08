@@ -35,7 +35,7 @@ public:
 				break;
 
 			}
-			else if (!(strcmp(&temp.back(), ";"))) { // Checking the special semicolon case at the end of the string
+			else if (!(strcmp(&temp.at(last_index), ";"))) { // Checking the special semicolon case at the end of the string
 
 				//Making sure we dont add an empty string to the vector
 				if (last_index > 0)
