@@ -1,34 +1,19 @@
-# Assignment 1 -- Creating a Design Document
-
-**Note: All assignments must be done with *exactly* one partner.**
-
+# Rshell Assignment 
 ## Introduction
-As programmers it is tempting for us to get our hands dirty with code immediately after receiving the specs. In any complex software development, there are many moving parts and pieces that can quickly turn out project into spaghetti code. It is imperative that before we open vim we take a step back, plan out the code we are going to write, and create a design to follow. One tool software engineers use for this is Unified Modeling Language (UML) which help visualize our project’s architecture. In this assignment you will create a design document to map out your first coding assignment, Assignment 2. This will include a simple UML diagram to represent your components and their dependencies. You can [read more about creating UML diagrams from this slide deck](https://docs.google.com/presentation/d/12gFQDxn4T0sXfXiuGIiW5OlUfgKW85e86UbnR59gMdc/edit?usp=sharing).
+This Rshell program processes commands entered by the user and executes them similarly to that of BASH in Linux, with the additional feature of being able to chain commands with the three operators `;` , `&&`, and `||`. The design pattern used in this project is a composite pattern. We choose to implement this partitioning pattern because it allows us significant extensibility when adding new features. Commands have the following format:
+```
+$ executable [argumentList] [connector] [cmd] ...
+```
+## UML
+![UML Diagram](https://github.com/cs100/assignment-1-team-7-1/blob/master/rshell_uml.png)
 
-## Assignment
-Your assignment is to write a design document that you will use for reference when developing your Assignment 2 submission. It’s purpose is as an exercise to get you to start designing before you start coding. Like any good agile method, what you write in the design document is a starting point for your design, not a road map that you must rigidly follow (because that would be waterfall development, and this is not a government project). You should create a document with the following sections
+## Classes
 
-- **Title Page:** including the title “Assignment 1: Design”, the date, the quarter and year, and the authors names
-- **Introduction:** Give a brief overview of your design
-- **Diagram:** This will be the UML diagram for your system, and should show all classes you plan on developing. This diagram can take up multiple pages if necessary.
-- **Classes/Class Groups:** descriptions of each class/class group that you plan on developing, this can be as simple as a description of what each class accomplishes and how, or a pseudo code level class definition. A class group would be a group of classes that all inherit from a single base class (composite classes are an example). For class group give a description of the base class, as well as the subtle differences between the child classes. Make sure to describe any key design choices, such as why you chose certain containers for key data members, why a class needs to pointer member to another class, or how a key function will generally be written
-- **Coding Strategy:** how you and your partner plan to break up the work, who will be in charge of which segments and how you will integrate the segments together
-- **Roadblocks:** issues that you think will arise during development and what strategy you will use to overcome them
+In utilizing the composite design pattern, we built a `Base` class with two subclasses, a leaf node `Command` and a composite node `Operator`. The Operator class also had three subclasses representing the 3 types of connectors: `Semicolon`, `Or`, and `And`. In addition to the composite structure we also have two other classes `Parser` and `ExpressionBuilder`. The Parser class facilitates the translation if the user inputted string, into a `vector<string>` of commands and operators, to be handed over to the ExpressionBuilder class. The ExpressionBuilder class builds a tree based off of the `vector<string>` delivered by the Parser and dynamically creates this structure. An example of our process of breaking down the inputted string and building an tree of executions can be seen in the figure below.
 
-When you create your design document, do not think only about the current assignment. Think about how you would also extend the assignment to have new functionality (an important exercise in software construction, as new functionality is almost always necessary).
+![Flow Diagram](https://github.com/cs100/assignment-1-team-7-1/blob/master/rshell_tree_structure.png)
 
-Please  use some drawing program to create your UML diagram. UML diagrams that are drawn by hand and scanned/photographed and added to your design document will not be allowed. Programs such as GIMP, GraphViz, or even Google Docs should be capable of creating these diagrams.
+## Known Bugs
 
-## Submission
-Submit your design document as a single PDF to your groups GitHub repo.
-
-## Grading
-Your documents will be graded using the following breakdown
-
-|Points|Section|
-|:---:|:---|
-| 40 | UML Diagram |
-| 30 | Class Descriptions |
-| 20 | All Other Sections |
-| 10 | Structure |
-|**100** | **Total** |
+1. Calling the exit command after a command fails, will not exit the program. The user has to type exit another time.
+1. Chains of commands seperated by 3 or more operators will have the last couple of commands fail.
