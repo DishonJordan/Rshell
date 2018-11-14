@@ -24,12 +24,13 @@ class Command : public Base {
     Command(vector<char*> cmd) : Base(), cmd(cmd) {}
 
     bool execute() {
-	
-	/* create the child */
-        pid_t pid = fork();
+	pid_t pid = fork(); // Creating the child with fork()
 
-        /* perror if fork error */
-        if (pid < 0) {
+   	if (strcmp(cmd[0], "exit") == 0) { // Check for the exit command
+            exit(0);
+        }
+
+        if (pid < 0) { 
             perror("fork ERROR");
             return 0;
         }
@@ -38,6 +39,7 @@ class Command : public Base {
 	if (pid == 0) {
 	    execvp(cmd[0], cmd.data());
 	    perror("execvp ERROR");
+            return 0;
 	}
 
         /* wait for the child to terminate */
