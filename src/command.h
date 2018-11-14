@@ -17,7 +17,7 @@ class Command : public Base {
     vector<char*> cmd;
 
   public:
-    /* default coiinstructor */
+    /* default constructor */
     Command() : Base() {}
 
     /* constructor */
@@ -29,23 +29,19 @@ class Command : public Base {
    	if (strcmp(cmd[0], "exit") == 0) { // Check for the exit command
             exit(0);
         }
-
-        if (pid < 0) { 
+        
+        if (pid < 0) { // Check if fork() returned an error
             perror("fork ERROR");
             return 0;
         }
-
-	/* override the child process */
-	if (pid == 0) {
+	if (pid == 0) {  // Override the child process with execvp syscall
 	    execvp(cmd[0], cmd.data());
-	    perror("execvp ERROR");
-            return 0;
+	    perror("execvp ERROR");  // This line will be skipped if successfull
+            return 0;  // This line will be skipped if successfull
 	}
-
-        /* wait for the child to terminate */
-	waitpid(pid, NULL, 0);
+	waitpid(pid, NULL, 0);  // Wait for the child process to terminate
   
-    	return 1;
+    	return 1;  // Return true if successfull
     }
 
 	void add(char* c) {
