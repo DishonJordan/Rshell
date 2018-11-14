@@ -27,10 +27,18 @@ class Command : public Base {
 	/* create the child */
         pid_t pid = fork();
 
+	if (pid < 0) {
+	    perror("fork error");
+	    return 0;
+	}
+
 	/* override the child process */
-	if (pid == 0) {
+	else if (pid == 0) {
 	    execvp(cmd[0], cmd.data());
 	    cout << "Command Failed" << endl;
+	}
+        else {
+	    perror("exec failed");
 	}
 
         /* wait for the child to terminate */
