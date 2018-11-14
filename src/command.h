@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <string>
 #include <iostream>
+#include  <stdio.h>
 
 using namespace std;
 
@@ -27,18 +28,16 @@ class Command : public Base {
 	/* create the child */
         pid_t pid = fork();
 
-	if (pid < 0) {
-	    perror("fork error");
-	    return 0;
-	}
+        /* perror if fork error */
+        if (pid < 0) {
+            perror("fork ERROR");
+            return 0;
+        }
 
 	/* override the child process */
-	else if (pid == 0) {
+	if (pid == 0) {
 	    execvp(cmd[0], cmd.data());
-	    cout << "Command Failed" << endl;
-	}
-        else {
-	    perror("exec failed");
+	    perror("execvp ERROR");
 	}
 
         /* wait for the child to terminate */
