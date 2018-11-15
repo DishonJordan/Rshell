@@ -9,7 +9,7 @@ ADD_EXECUTABLE(rshell
     )
 
 ADD_EXECUTABLE(test
-    tests/test.cpp
+    test.cpp
 )
 
 TARGET_LINK_LIBRARIES(test gtest)
