@@ -36,8 +36,8 @@ public:
 	Base* build_tree() {
 
 		Operator* top = new Operator();
-
-		if (input.size() == 0) {//Empty input case
+		
+		if (input.size() == 0|| (op_index.size() == 1 && input.size() == 1)) {//Empty input case or just a single operator
 			return top;
 
 		}
@@ -50,8 +50,7 @@ public:
 			return c;
 
 
-		}
-		else { // Initializing the top node
+		}else { // Initializing the top node
                  	
 			top = CheckOperator(input[op_index[op_index.size() - 1]]);
 
