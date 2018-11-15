@@ -4,6 +4,7 @@ cmake_install.cmake
 Makefile
 lib/
 src/a.out
+tests/a.out
 
 rshell
 test
