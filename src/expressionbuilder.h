@@ -34,8 +34,8 @@ public:
 
 	//Builds a tree of operators and commands using a vector<string> input.
 	Base* build_tree() {
-		Operator* top = new Operator();
 
+		Operator* top = new Operator();
 
 		if (input.size() == 0) {//Empty input case
 			return top;
@@ -52,7 +52,7 @@ public:
 
 		}
 		else { // Initializing the top node
-
+                 	
 			top = CheckOperator(input[op_index[op_index.size() - 1]]);
 
 			//Creating a new command to hold the last command
@@ -73,21 +73,20 @@ public:
 	//Recursive function that builds the rest of the expression tree until there are no more operators and commands
 	void add_children(Operator* parent, int left_index, int right_index) {
 
-
-		if (left_index < 0) { //Base case: The last command of the tree
+		if (left_index <  0) { //Base case: The last command of the tree
 
 			Command* first_command = new Command();
 
-			PopulateCommand(0, op_index[right_index], first_command);
+			PopulateCommand(0, op_index[0], first_command);
 
 			parent->setLeftNode(first_command);
 
 			return;
 		}
 
-		Operator* op = CheckOperator(input[op_index[right_index]]);
+		Operator* op = CheckOperator(input[op_index[left_index]]);
 
-		Command* command = new Command();
+		Command* command = new Command();	 
 
 		PopulateCommand(op_index[left_index] + 1, op_index[right_index], command);
 
@@ -104,7 +103,7 @@ public:
 
 	//Checks which operator the given string is and returns the new object
 	Operator* CheckOperator(string s) {
-
+		
 		if (s.compare(";") == 0) {
 			return new Semicolon();
 		}
@@ -125,6 +124,7 @@ public:
 	void PopulateCommand(int initial_index, int final_index, Command* c) {
 
 			for (int i = initial_index; i < final_index; i++) {
+
 				c->add(const_cast<char*>(input[i].c_str()));
 			}
 
