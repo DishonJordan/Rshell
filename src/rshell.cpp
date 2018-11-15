@@ -24,10 +24,10 @@ int main() {
 
 		cout <<"[" << user << "@" << host <<"]$ ";
 		getline(cin, input);
-
+		
 		//quits program if quit is entered
-		if (input.compare("exit") == 0)
-			break;
+		if (strcmp(input.data(),"exit") == 0)
+			return 0;
 
 		//Creating a parser to parse the user input
 		Parser* pat = new Parser();
