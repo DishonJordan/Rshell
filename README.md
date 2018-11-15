@@ -16,4 +16,3 @@ In utilizing the composite design pattern, we built a `Base` class with two subc
 ## Known Bugs
 
 1. Calling the exit command after a command fails, will not exit the program. The user has to type exit another time.
-1. Chains of commands seperated by 3 or more operators will have the last couple of commands fail.
