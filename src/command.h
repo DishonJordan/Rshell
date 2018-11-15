@@ -18,12 +18,16 @@ class Command : public Base {
 
   public:
     /* default constructor */
-    Command() : Base() {}
+    Command() : Base() {} 
 
     /* constructor */
     Command(vector<char*> cmd) : Base(), cmd(cmd) {}
 
     bool execute() {
+
+	cmd.push_back(NULL);
+
+
 	pid_t pid = fork(); // Creating the child with fork()
 
    	if (strcmp(cmd[0], "exit") == 0) { // Check for the exit command
