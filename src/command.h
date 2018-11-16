@@ -25,31 +25,34 @@ class Command : public Base {
     Command(vector<char*> cmd) : Base(), cmd(cmd) {}
 
     bool execute() {
+	if(!cmd.empty()){
+	
+	  cmd.push_back(NULL);
 
-	cmd.push_back(NULL);
+	  pid_t pid = fork(); // Creating the child with fork()
 
-
-	pid_t pid = fork(); // Creating the child with fork()
-
-   	if (strcmp(cmd[0], "exit") == 0) { // Check for the exit command
-            exit(0);
-        }
+   	  if (strcmp(cmd[0], "exit") == 0) { // Check for the exit command
+              exit(0);
+          }
         
-        if (pid < 0) { // Check if fork() returned an error
-            perror("fork ERROR");
-            return 0;
-        }
-	if (pid == 0) {  // Override the child process with execvp syscall
-	    execvp(cmd[0], cmd.data());
-	    perror("execvp ERROR");  // This line will be skipped if successfull
-            return 0;  // This line will be skipped if successfull
-	}
-	waitpid(pid, NULL, 0);  // Wait for the child process to terminate
+          if (pid < 0) { // Check if fork() returned an error
+              perror("fork ERROR");
+              return 0;
+          }
+	  if (pid == 0) {  // Override the child process with execvp syscall
+	      execvp(cmd[0], cmd.data());
+	      perror("execvp ERROR");  // This line will be skipped if successfull
+              return 0;  // This line will be skipped if successfull
+	  }
+	  waitpid(pid, NULL, 0);  // Wait for the child process to terminate
   
-    	return 1;  // Return true if successfull
-    }
-
-	void add(char* c) {
-		cmd.push_back(c);
+    	  return 1;  // Return true if successfull
 	}
+	return 0;
+   }
+
+  void add(char* c) {
+    cmd.push_back(c);
+  }
+
 };

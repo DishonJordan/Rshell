@@ -55,9 +55,11 @@ public:
 
 			//Creating a new command to hold the last command
 			Command* command = new Command();
-
-			PopulateCommand(op_index[op_index.size() - 1] + 1, input.size(), command);
-
+			
+			//Case where nothing is entered after an operator
+			if( op_index[op_index.size() - 1] != input.size() - 1){
+			 PopulateCommand(op_index[op_index.size() - 1] + 1, input.size(), command);
+			}
 			//Assigning that command to the right node of top
 			top->setRightNode(command);
 
