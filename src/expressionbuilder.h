@@ -9,7 +9,6 @@
 #include "and.h"
 #include "or.h"
 
-
 using namespace std;
 
 class ExpressionBuilder {
