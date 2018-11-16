@@ -18,14 +18,25 @@ public:
 
 		char* cptr = strtok(inputArray, " ");
 
+		//Look for # and delete everything after it
+		int count = 0;
+		for (char& c : input) {
+			if (c == '#') {
+				input.erase(input.at(count), input.size() - 1);
+				break;
+			}
+			count++;
+		}
+
 		//Iterating through inputted string and adding each string to the input vector
 		while (cptr != NULL) {
 
 			string temp = cptr;
 			int last_index = temp.length() - 1;
 			size_t comment_index = temp.find("#");
+			
 
-			if (comment_index != string::npos) { //Checking for any comments
+			if (comment_index != string::npos) { //Checking for any comments. meaning a # was found
 
 				//Making sure we dont add an empty string to the vector
 				if (comment_index > 0)
