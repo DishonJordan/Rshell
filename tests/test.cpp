@@ -57,25 +57,32 @@ TEST(ExpressionBuilderTEST, TwoConnectorTEST) {
  
      EXPECT_TRUE(top->execute());
  }
- /* Operator Testing */
+
  
- 
- /*Parser Testing */
- TEST(testing, test1) {
-    vector<string> v = {"ls", "-a"};
+/* Operator Testing */
+TEST(OperatorTEST, AndTEST) {
+    vector<string> v = {"echo", "hello", ";", "echo", "world"};
+    ExpressionBuilder* ep = new ExpressionBuilder(v);
+    
+    EXPECT_TRUE(ep->build_tree()->execute());
+}
+
+TEST(OperatorTEST, OrTEST) {
+    vector<string> v = {"echo", "hello", "||", "echo", "world"};
     ExpressionBuilder* ep = new ExpressionBuilder(v);
 
     EXPECT_TRUE(ep->build_tree()->execute());
 }
 
-TEST(testing, test2) {
-    vector<string> v = {"ls", "-l", ";", "echo","hello"};
+TEST(OperatorTEST, SemicolonTEST) {
+    vector<string> v = {"echo", "hello", "&&", "echo", "world"};
     ExpressionBuilder* ep = new ExpressionBuilder(v);
 
     EXPECT_TRUE(ep->build_tree()->execute());
 }
-
-void printParser(vector<string> v){
+ 
+/*Parser Testing */
+ void printParser(vector<string> v){
 
   for(int i = 0; i < v.size(); i++)
     cout << v[i] << " ";
