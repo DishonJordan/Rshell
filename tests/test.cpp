@@ -54,11 +54,8 @@ TEST(ExpressionBuilderTEST, TwoConnectorTEST) {
      vector<string> v = {"echo", "hello", ";", "ls", "-a", "||", "mkdir", "test", "&&", "echo", "world", ";", "git", "status"};
      ExpressionBuilder* ep = new ExpressionBuilder(v);
      Base* top = ep->build_tree();
-     vector<string> v2 = {";"};
-     ExpressionBuilder* ep2 = new ExpressionBuilder(v2);
-     Base* test_top = ep2->build_tree();
-
-     EXPECT_EQ(test_top, top);
+ 
+     EXPECT_TRUE(top->execute());
  }
  /* Operator Testing */
  
