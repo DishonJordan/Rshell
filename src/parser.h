@@ -1,5 +1,4 @@
-
-apragma once once
+#pragma once once
 #include <iostream>
 #include <cstring>
 #include <vector>
