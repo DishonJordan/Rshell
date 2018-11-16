@@ -16,4 +16,4 @@ In utilizing the composite design pattern, we built a `Base` class with two subc
 ## Known Bugs
 
 1. Calling the exit command after a command fails, will not exit the program. The user has to type exit another time.
-2. Calling # directly after an operator(; && ||) causes a segmentation fault. e.g. $ echo hello; #echo world
+
