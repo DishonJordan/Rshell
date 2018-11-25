@@ -2,13 +2,15 @@
 #include "base.h"
 
 class Operator : public Base {
-  protected:
+    public:
     Base* l_node;
     Base* r_node;
 
-  public:
     /* Constructors */
-    Operator() : Base() {}
+    Operator() : Base() {
+    	l_node = NULL;
+	r_node = NULL;
+    }
     Operator(Base* l_node, Base* r_node) : Base() {
         this->l_node = l_node;
 	this->r_node = r_node;
