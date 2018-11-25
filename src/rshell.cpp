@@ -27,14 +27,18 @@ int main() {
 		
 		//quits program if quit is entered
 		if (strcmp(input.data(),"exit") == 0)
-			return 0;
+		  return 0;
 
 		//Creating a parser to parse the user input
 		Parser* pat = new Parser();
 		//Creating an ExpressionBuilder to take in the parsed input
 		ExpressionBuilder* bob = new ExpressionBuilder(pat->parse_input(input));
 		//Building the command tree and executing it.
-		bob->build_tree()->execute();
+		Base* top = bob->build_tree();
+			
+		if(top != NULL)
+		  top->execute();
+		
 	}
 
 	return 0;
