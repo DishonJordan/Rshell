@@ -27,11 +27,11 @@ class Command : public Base {
     bool execute() {
 	    if(!cmd.empty()){ // Check for the empty command
             if (strcmp(cmd[0], "test") == 0) { //Check for test command
-                if (!test_command()) { 
-                    return 0; // return false if the test failed
+                if (test_command()) { 
+                    return 1; // return true if test passed
                 }
 
-            return 1;
+                return 0;
             }
 
             else {
@@ -64,8 +64,8 @@ class Command : public Base {
 
     void add(char* c) {
         cmd.push_back(c);
-        cout << "c: " << c << endl;
     }
- 
+    
+    // Defined in test_command.h
     bool test_command();
 };
