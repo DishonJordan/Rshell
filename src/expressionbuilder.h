@@ -8,102 +8,181 @@
 #include "semicolon.h"
 #include "and.h"
 #include "or.h"
+#include <stack>  
 
 using namespace std;
 
 class ExpressionBuilder {
-private:
-	vector<string> input;
-	vector<int> op_index;
+	stack<string> input;
 
 public:
-	ExpressionBuilder(vector<string> commands) { //Populates input and op_index
+	ExpressionBuilder(vector<string> commands) {
 
-		input = commands;
-
-		//iterates through command and adds the indices of the operators to op_index
-		for (unsigned int i = 0; i < input.size(); i++) {
-
-			if (input[i].compare(";") == 0 || input[i].compare("&&") == 0 || input[i].compare("||") == 0)
-				op_index.push_back(i);
-
+		//Converts our input vector into a stack
+		for (int i = 0; i < commands.size(); i++) {
+			input.push(commands[i]);
 		}
-
 	}
 
-	//Builds a tree of operators and commands using a vector<string> input.
 	Base* build_tree() {
 
-		Operator* top = new Operator();
-		
-		if (input.size() == 0|| (op_index.size() == 1 && input.size() == 1)) {//Empty input case or just a single operator
-			return top;
+		Base* top = NULL; //Defines a pointer to the top of the tree
 
-		}
-		else if (op_index.size() == 0) { //No operator case
-
-			Command* c = new Command();
-
-			PopulateCommand(0, input.size(), c);
-
-			return c;
-
-
-		}else { // Initializing the top node
-                 	
-			top = CheckOperator(input[op_index[op_index.size() - 1]]);
-
-			//Creating a new command to hold the last command
-			Command* command = new Command();
-			
-			//Case where nothing is entered after an operator
-			if( op_index[op_index.size() - 1] != input.size() - 1){
-			 PopulateCommand(op_index[op_index.size() - 1] + 1, input.size(), command);
-			}
-			//Assigning that command to the right node of top
-			top->setRightNode(command);
-
-			add_children(top, op_index.size() - 2, op_index.size() - 1);
-
-		}
+		if (!input.empty())
+			add_children(input, top); //Recursively builds the rest of the tree based off of the input
 		return top;
 
 	}
 
-	//Recursive function that builds the rest of the expression tree until there are no more operators and commands
-	void add_children(Operator* parent, int left_index, int right_index) {
+	void add_children(stack<string> s, Base*& top) {
 
-		if (left_index <  0) { //Base case: The last command of the tree
+		stack<string> temp; //Defining a temporary stack to maintain the strings of the command
+		string current = s.top();
 
-			Command* first_command = new Command();
+		//Adding strings to the temp stack until an operator is found.
+		while (!isOperator(current) && current.compare(")") != 0 && current.compare("(") != 0) {
 
-			PopulateCommand(0, op_index[0], first_command);
+			temp.push(current);
 
-			parent->setLeftNode(first_command);
+			s.pop();
 
+			if (s.empty()) { //Base Case where the main stack is empty
+
+				//Definining a new command and populating it based off of the temp stack
+				Command* last_command = new Command();
+				populateCommand(last_command, temp);
+			
+				if (top == NULL) { //Case where there was no prior top, so we assign this new command to the top
+				  top = last_command;
+				}
+				else { //Case where there was a previous operator top, so we assign this new command to the left node of top
+				  ((Operator*&)top)->setLeftNode(last_command);
+				}
+
+				return; //Finished the leaf
+
+			}
+
+			current = s.top(); //Assigning the next top value to current
+
+		}
+
+		if (isOperator(current)) { //Standard Operator Case
+			Operator* op = CheckOperator(current);
+
+			//Definining a new command and populating it based off of the temp stack
+			Command* cmd = new Command();
+			populateCommand(cmd, temp);
+
+			//Setting the right node of the new operator to
+			op->setRightNode(cmd);
+
+			top = op; //Assigning top to our operator
+
+			s.pop(); //Removing the operator from the stack
+
+			if (!s.empty())
+			  add_children(s, op->l_node); //Builds the rest of the tree with the current main stack and left node of the operator as the new top
+			else
+			  top = NULL;
+		}
+		else if (current.compare(")") == 0) { //Precedence Operator Case
+
+			int num_nested = 0; //holds the number of nested precedence operators
+
+			s.pop(); //get rid of the ")"
+			stack<string> stack_inverter; //Definition of another stack because our temp stack is backwards
+
+			if (!s.empty())
+				current = s.top();
+			else {
+				cout << "ERROR: PRECEDENCE NOT CLOSED" << endl;
+				return;
+			}
+
+			while ((current.compare("(") != 0) || num_nested != 0) {
+				stack_inverter.push(current);
+
+				//If there is a nested ")" we increment num_nested
+				if ((current.compare(")") == 0))
+					num_nested++;
+				else if ((current.compare("(") == 0)) //If there is a nested "(" we decrement num_nested
+					num_nested--;
+
+				s.pop();
+				if (s.empty()) { //Case where the main stack is empty but the precedence operator was not closed
+					cout << "ERROR: PRECEDENCE NOT CLOSED" << endl;
+					return; //Exit gracefully
+				}
+				current = s.top(); //Assigning the next top value to current
+
+			}
+
+			//Assigning all of the elements of stack_inverter to the temp stack
+			while (!stack_inverter.empty()) {
+				temp.push(stack_inverter.top());
+				stack_inverter.pop();
+			}
+
+			s.pop(); //get rid of "("
+
+
+
+			if ((top == NULL) && !s.empty()) {//Case where there was no previous top
+				Operator* op = CheckOperator(s.top());
+				s.pop();
+				top = op;
+				if(!temp.empty())
+					add_children(temp, op->r_node);
+
+				add_children(s, op->l_node);
+
+			}
+			else {
+				if (!s.empty()) { //Case where there is a previous top but there are more commands after the parenthesis
+					Operator* op = CheckOperator(s.top());
+					s.pop();
+					top = op;
+					if(!temp.empty())
+						add_children(temp, op->r_node); //Recursively build the right tree with the inner parenthesis
+					
+					add_children(s, op->l_node); //Recursively build the left tree with the remainder of the stack
+				}
+				else if (s.empty()) { //Case where the commands in the parenthesis are the last commands
+					if(!temp.empty())
+						add_children(temp, top); //Recursively build the last command in the parenthesis
+
+				}
+
+			}
+
+
+
+		}
+		else if (current.compare("(") == 0) {
+			cout << "ERROR: PRECEDENCE NOT CLOSED" << endl;
 			return;
 		}
 
-		Operator* op = CheckOperator(input[op_index[left_index]]);
-
-		Command* command = new Command();	 
-
-		PopulateCommand(op_index[left_index] + 1, op_index[right_index], command);
-
-		//Assigning that command to the right node of op
-		op->setRightNode(command);
-
-		//Assigning the left node of the parent Operator to op
-		parent->setLeftNode(op);
-
-		//Recurse with the left node 
-		add_children(op, left_index - 1, right_index - 1);
 
 	}
 
-	//Checks which operator the given string is and returns the new object
+
+	//Fills command's internal vector with the stack contents
+	void populateCommand(Command* c, stack<string> s) {
+		while (!s.empty()) {
+			char* ch = new char[s.top().size()-1];
+			strcpy(ch,s.top().c_str());
+			c->add(ch);
+			s.pop();
+		}
+
+	}
+
+
+	//Compares operator to a given string and returns an Operator* of that type
 	Operator* CheckOperator(string s) {
-		
+
 		if (s.compare(";") == 0) {
 			return new Semicolon();
 		}
@@ -114,24 +193,22 @@ public:
 			return new Or();
 		}
 		else {
-			cout << "Did not match any Operator. Returning default." << endl;
+			cout << s <<" Did not match any Operator. Returning default." << endl;
 			return new Operator;
 		}
 
 	}
 
-	//Populates command's internal vector with the strings in the input between the given indicies, converts that string into a char*
-	void PopulateCommand(int initial_index, int final_index, Command* c) {
+	//Checks to see if a string is a standard operator and returns true or false;
+	bool isOperator(string s) {
 
-			for (int i = initial_index; i < final_index; i++) {
-
-				c->add(const_cast<char*>(input[i].c_str()));
-			}
-
+		if (s.compare(";") == 0 || s.compare("&&") == 0 || s.compare("||") == 0) {
+			return true;
 		}
+		return false;
+
+	}
 
 
-
-	
 
 };
