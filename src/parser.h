@@ -67,19 +67,20 @@ public:
 			}
 			else if (s[i] == '(') {
 				temp.append(" ( ");
-			}else if (s[i] == '[') {//converts a [ to a test command
-				
-				temp.append(" test ");
-
-			}else if (s[i] == ']') { //does not add the right half of the bracket
-
 			}
+            else if (s[i] == '[') {//converts a [ to a test command
+				temp.append(" test ");
+                for (int j = 0; j < s.size(); j++) {  // Finds the ] and erases it from the string
+                    if (s[j] == ']')
+                        s.erase(j, 1);
+                }
+			}  
 			else {
 				temp += s[i];
 			}
 		
 		}
-		return temp;
+        return temp;
 
 	}
 	   	 
