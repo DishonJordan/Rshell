@@ -1,3 +1,4 @@
+#pragma once
 #include "command.h"
 #include <iostream>
 #include "sys/stat.h"
@@ -13,6 +14,7 @@ bool Command::test_command() {
     if (strcmp(cmd[1], "-d") == 0) {
         if (S_ISDIR(buf.st_mode)) {
             std::cout << "(True)" << std::endl;
+            return 1;
         }
         else {
             std::cout << "(False)" << std::endl;
@@ -24,6 +26,7 @@ bool Command::test_command() {
     else if (strcmp(cmd[1], "-f") == 0) {
         if (S_ISREG(buf.st_mode)) {
             std::cout << "(True)" << std::endl;
+            return 1;
         }
         else {
             std::cout << "(False)" << std::endl;
@@ -35,6 +38,7 @@ bool Command::test_command() {
     else {
         if (result == 0) {
             std::cout << "(True)" << std::endl;
+            return 1;
         }
         else {
             std::cout << "(False)" << std::endl;
