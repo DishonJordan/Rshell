@@ -9,7 +9,10 @@ ADD_EXECUTABLE(rshell
     )
 
 ADD_EXECUTABLE(test
-   tests/test.cpp
+  tests/expressionprecedencetest.cpp
+  tests/expressionbuildertest.cpp
+  tests/parsertest.cpp
+  tests/parserprecedencetest.cpp
 )
 
 TARGET_LINK_LIBRARIES(test gtest)
