@@ -4,59 +4,83 @@
 #include <vector>
 #include <string.h>
 #include <string>
+#include <algorithm>
 
 using namespace std;
- 
+
 class Parser {
 
 public:
-         Parser() {}
- 
-         vector<string> parse_input(string input) {
-                         
-                 //Delete everything after #
-                 size_t comment_index = input.find("#");
-                 if(comment_index != string::npos)
-                         input = input.substr(0,comment_index);
- 
-                 char inputArray[input.size() - 1]; 
-                 strcpy(inputArray, input.c_str());
-                 vector<string> output;
- 
-                 char* cptr = strtok(inputArray, " ");
-                 
- 
- 
-                 //Iterating through inputted string and adding each string to the input vector
-                 while (cptr != NULL) {
- 
-                         string temp = cptr;
-                         int last_index = temp.length() - 1;
+	Parser() {}
 
-                         if (!(strcmp(&temp.at(last_index), ";"))) { // Checking the special semicolon case at the end of the string
- 
-                                 //Making sure we dont add an empty string to the vector
-                                 if (last_index > 0)
-                                         output.push_back(temp.substr(0, last_index));
- 
-                                 output.push_back(";");
- 
-                         }
-                         else {
- 
-                                 output.push_back(temp);
-                         }
- 
-                         cptr = strtok(NULL, " ");
- 
-                 }
-                 
-                 return output;
- 
-         }
- 
- 
- 
- 
- 
- };
+	vector<string> parse_input(string input) {
+
+		//Defining the output vector
+		vector<string> output; 
+
+		//Delete everything after #
+		size_t comment_index = input.find("#");
+		if (comment_index != string::npos)
+			input = input.substr(0, comment_index);
+
+		input = seperateOperators(input);
+
+
+		char inputArray[input.size() - 1];
+		strcpy(inputArray, input.c_str());
+
+		char* cptr = strtok(inputArray, " ");
+
+		//Iterating through inputted string and adding each string seperated by a space to the input vector
+		while (cptr != NULL) {
+
+			string temp = cptr;
+
+			output.push_back(temp);
+
+			cptr = strtok(NULL, " ");
+
+		}
+
+		//Prints output for verification
+	/*	for (int i = 0; i < output.size(); i++)
+			cout <<"[" << output[i] << "]";
+		cout << endl;
+	*/	
+		return output;
+	
+
+	}
+
+	//Adds extra spaces before and after operators so that strtok creates a seperate string for them
+	string seperateOperators(string s) {
+
+		string temp;
+		
+		for (int i = 0; i < s.size(); i++) {
+
+			if (s[i] == ';') {
+				temp.append(" ; ");
+			}
+			else if (s[i] == ')') {
+				temp.append(" ) ");
+			}
+			else if (s[i] == '(') {
+				temp.append(" ( ");
+			}else if (s[i] == '[') {//converts a [ to a test command
+				
+				temp.append(" test ");
+
+			}else if (s[i] == ']') { //does not add the right half of the bracket
+
+			}
+			else {
+				temp += s[i];
+			}
+		
+		}
+		return temp;
+
+	}
+	   	 
+};
