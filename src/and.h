@@ -7,16 +7,13 @@ class And: public  Operator {
 	And(Base* left, Base* right) : Operator(left, right) {}
 
 	bool execute() {
-		if (l_node->execute()) {
-
-			if(r_node->execute())
-				return true;
+          if (l_node->execute()) {
+		if(r_node->execute())
+                  return true;
 		}
 
-		return false;
+	    return false;
 
-	}
-
-
+	  }
 
 };

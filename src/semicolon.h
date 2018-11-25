@@ -7,10 +7,10 @@ class Semicolon: public  Operator {
 	Semicolon(Base* left, Base* right) :Operator(left, right) {}
 
 	bool execute() {
-	
+			
 		l_node->execute();
 		r_node->execute();
-
+		
 		return true;
 	
 	}

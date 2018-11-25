@@ -25,6 +25,7 @@ class Command : public Base {
     Command(vector<char*> cmd) : Base(), cmd(cmd) {}
 
     bool execute() {
+	
 	if(!cmd.empty()){
 	
 	  cmd.push_back(NULL);
@@ -52,6 +53,7 @@ class Command : public Base {
    }
 
   void add(char* c) {
+    //cout << "Adding " << c << " to command" << endl;
     cmd.push_back(c);
   }
 
