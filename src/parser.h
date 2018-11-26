@@ -70,18 +70,15 @@ public:
 			}
             else if (s[i] == '[') {//converts a [ to a test command
 				temp.append(" test ");
-                for (int j = 0; j < s.size(); j++) {  // Finds the ] and erases it from the string
-                    if (s[j] == ']')
-                        s.erase(j, 1);
-                }
-			}  
-			else {
-				temp += s[i];
-			}
-		
-		}
-        return temp;
+            }
+			else  if (s[i] == ']') {
+                // Do nothing
+            } else {
+			    temp += s[i];
+            }
+        }
 
+        return temp;
 	}
 	   	 
 };
