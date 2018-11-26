@@ -7,6 +7,7 @@
 #include "command.h"
 #include "semicolon.h"
 #include "and.h"
+#include "testcommand.h"
 #include "or.h"
 #include <stack>  
 
@@ -33,7 +34,7 @@ public:
 		return top;
 
 	}
-
+private:
 	void add_children(stack<string> s, Base*& top) {
 
 		stack<string> temp; //Defining a temporary stack to maintain the strings of the command
@@ -49,14 +50,14 @@ public:
 			if (s.empty()) { //Base Case where the main stack is empty
 
 				//Definining a new command and populating it based off of the temp stack
-				Command* last_command = new Command();
+				Command* last_command = CheckCommand(temp.top());
 				populateCommand(last_command, temp);
-			
+
 				if (top == NULL) { //Case where there was no prior top, so we assign this new command to the top
-				  top = last_command;
+					top = last_command;
 				}
 				else { //Case where there was a previous operator top, so we assign this new command to the left node of top
-				  ((Operator*&)top)->setLeftNode(last_command);
+					((Operator*&)top)->setLeftNode(last_command);
 				}
 
 				return; //Finished the leaf
@@ -71,7 +72,7 @@ public:
 			Operator* op = CheckOperator(current);
 
 			//Definining a new command and populating it based off of the temp stack
-			Command* cmd = new Command();
+			Command* cmd = CheckCommand(temp.top());
 			populateCommand(cmd, temp);
 
 			//Setting the right node of the new operator to
@@ -82,16 +83,16 @@ public:
 			s.pop(); //Removing the operator from the stack
 
 			if (!s.empty())
-			  add_children(s, op->l_node); //Builds the rest of the tree with the current main stack and left node of the operator as the new top
+				add_children(s, op->l_node); //Builds the rest of the tree with the current main stack and left node of the operator as the new top
 			else
-			  top = NULL;
+				top = NULL;
 		}
 		else if (current.compare(")") == 0) { //Precedence Operator Case
 
 			int num_nested = 0; //holds the number of nested precedence operators
 
 			s.pop(); //get rid of the ")"
-			stack<string> stack_inverter; //Definition of another stack because our temp stack is backwards
+			stack<string> stack_inverter; //Definition of another stack because our temp stack is upside down
 
 			if (!s.empty())
 				current = s.top();
@@ -132,7 +133,8 @@ public:
 				Operator* op = CheckOperator(s.top());
 				s.pop();
 				top = op;
-				if(!temp.empty())
+
+				if (!temp.empty())
 					add_children(temp, op->r_node);
 
 				add_children(s, op->l_node);
@@ -143,13 +145,13 @@ public:
 					Operator* op = CheckOperator(s.top());
 					s.pop();
 					top = op;
-					if(!temp.empty())
+					if (!temp.empty())
 						add_children(temp, op->r_node); //Recursively build the right tree with the inner parenthesis
-					
+
 					add_children(s, op->l_node); //Recursively build the left tree with the remainder of the stack
 				}
 				else if (s.empty()) { //Case where the commands in the parenthesis are the last commands
-					if(!temp.empty())
+					if (!temp.empty())
 						add_children(temp, top); //Recursively build the last command in the parenthesis
 
 				}
@@ -171,8 +173,8 @@ public:
 	//Fills command's internal vector with the stack contents
 	void populateCommand(Command* c, stack<string> s) {
 		while (!s.empty()) {
-			char* ch = new char[s.top().size()-1];
-			strcpy(ch,s.top().c_str());
+			char* ch = new char[s.top().size() - 1];
+			strcpy(ch, s.top().c_str());
 			c->add(ch);
 			s.pop();
 		}
@@ -193,11 +195,22 @@ public:
 			return new Or();
 		}
 		else {
-			cout << s <<" Did not match any Operator. Returning default." << endl;
+			cout << s << " Did not match any Operator. Returning default." << endl;
 			return new Operator;
 		}
 
 	}
+
+	Command* CheckCommand(string s) {
+
+		if (s.compare("test") == 0) {
+			return new TestCommand();
+
+		}else {
+			return new Command();
+		}
+
+}
 
 	//Checks to see if a string is a standard operator and returns true or false;
 	bool isOperator(string s) {
