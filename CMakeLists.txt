@@ -13,6 +13,7 @@ ADD_EXECUTABLE(test
   tests/expressionbuildertest.cpp
   tests/parsertest.cpp
   tests/parserprecedencetest.cpp
+  tests/parsertestcommand.cpp
 )
 
 TARGET_LINK_LIBRARIES(test gtest)
