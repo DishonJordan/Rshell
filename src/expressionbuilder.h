@@ -48,9 +48,16 @@ private:
 			s.pop();
 
 			if (s.empty()) { //Base Case where the main stack is empty
-
-				//Definining a new command and populating it based off of the temp stack
-				Command* last_command = CheckCommand(temp.top());
+				
+				//Defining a new command and populating it based off of the temp stack
+						
+				if(temp.empty())
+				  current.clear();
+				else
+				  current = temp.top();
+				
+				Command* last_command = CheckCommand(current);
+				
 				populateCommand(last_command, temp);
 
 				if (top == NULL) { //Case where there was no prior top, so we assign this new command to the top
@@ -61,7 +68,7 @@ private:
 				}
 
 				return; //Finished the leaf
-
+				
 			}
 
 			current = s.top(); //Assigning the next top value to current
@@ -69,23 +76,32 @@ private:
 		}
 
 		if (isOperator(current)) { //Standard Operator Case
+			
 			Operator* op = CheckOperator(current);
-
+			
+			if(temp.empty())
+			  current.clear();
+			else
+			  current = temp.top();
+			
 			//Definining a new command and populating it based off of the temp stack
-			Command* cmd = CheckCommand(temp.top());
+			Command* cmd = CheckCommand(current);
+
 			populateCommand(cmd, temp);
 
 			//Setting the right node of the new operator to
 			op->setRightNode(cmd);
-
+			
 			top = op; //Assigning top to our operator
 
 			s.pop(); //Removing the operator from the stack
+			
 
 			if (!s.empty())
 				add_children(s, op->l_node); //Builds the rest of the tree with the current main stack and left node of the operator as the new top
 			else
 				top = NULL;
+			
 		}
 		else if (current.compare(")") == 0) { //Precedence Operator Case
 

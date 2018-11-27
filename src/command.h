@@ -51,6 +51,6 @@ class Command : public Base {
     }
 
     void add(char* c) {
-        cmd.push_back(c);
+	cmd.push_back(c);
     }    
 };
