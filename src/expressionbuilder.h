@@ -7,7 +7,7 @@
 #include "command.h"
 #include "semicolon.h"
 #include "and.h"
-#include "testcommand.h"
+#include "test_command.h"
 #include "or.h"
 #include <stack>  
 

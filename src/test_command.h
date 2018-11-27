@@ -3,48 +3,60 @@
 #include <iostream>
 #include "sys/stat.h"
 
-bool Command::test_command() {
+class TestCommand : public Command {
+  private:
     // Set up for stat()
     struct stat buf;
     char* file_path = cmd.back();
     int result = stat(file_path, &buf);
 
+  public:
+    /* Constructors */
+    TestCommand() : Command() {}
+    TestCommand(vector<char*> cmd) : Command(cmd) {}
 
-    // Check for the directory flag
-    if (strcmp(cmd[1], "-d") == 0) {
-        if (S_ISDIR(buf.st_mode)) {
-            std::cout << "(True)" << std::endl;
-            return 1;
+    /* Pure Virtual definition */
+    bool execute() {
+        // Check for the directory flag
+        if (strcmp(cmd[1], "-d") == 0) {
+            if (S_ISDIR(buf.st_mode)) {
+                print_true();
+                return 1;
+            }
+            else {
+                print_false();
+                return 0;
+            }
         }
+
+        // Check for the regular file flag
+        else if (strcmp(cmd[1], "-f") == 0) {
+            if (S_ISREG(buf.st_mode)) {
+                print_true();
+                return 1;
+            }
+            else {
+                print_false();
+                return 0;
+            }
+        }
+
+        // Default to -e flag if not specified
         else {
-            std::cout << "(False)" << std::endl;
-            return 0;
+            if (result == 0) {
+                print_true();
+                return 1;
+            }
+            else {
+                print_false();
+                return 0;
+            }
         }
+
+        return 1; // If this point is reached, the test must have passed
     }
 
-    // Check for the regular file flag
-    else if (strcmp(cmd[1], "-f") == 0) {
-        if (S_ISREG(buf.st_mode)) {
-            std::cout << "(True)" << std::endl;
-            return 1;
-        }
-        else {
-            std::cout << "(False)" << std::endl;
-            return 0;
-        }
-    }
-
-    // Default to -e flag if not specified
-    else {
-        if (result == 0) {
-            std::cout << "(True)" << std::endl;
-            return 1;
-        }
-        else {
-            std::cout << "(False)" << std::endl;
-            return 0;
-        }
-    }
-
-    return 1; // If this point is reached, the test must have passed
-}
+    // Print methods 
+    void print_true() { std::cout << "(True)" << std::endl; }
+    void print_false() { std::cout << "(False)" << std::endl; }
+};
