@@ -7,8 +7,6 @@ class TestCommand : public Command {
   private:
     // Set up for stat()
     struct stat buf;
-    char* file_path = cmd.back();
-    int result = stat(file_path, &buf);
 
   public:
     /* Constructors */
@@ -17,7 +15,11 @@ class TestCommand : public Command {
 
     /* Pure Virtual definition */
     bool execute() {
-        // Check for the directory flag
+	 char* file_path = cmd.back();
+	 int result = stat(file_path, &buf);
+
+	
+	// Check for the directory flag
         if (strcmp(cmd[1], "-d") == 0) {
             if (S_ISDIR(buf.st_mode)) {
                 print_true();
@@ -54,6 +56,7 @@ class TestCommand : public Command {
         }
 
         return 1; // If this point is reached, the test must have passed
+	
     }
 
     // Print methods 
