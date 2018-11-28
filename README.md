@@ -15,11 +15,11 @@ In utilizing the composite design pattern, we built a `Base` class with two subc
 
 ## Precedence Operators
 
-Precedence operators guide the affect `Operators`, controlling the logical flow of the command sequence. This precedece is implemented through both our, `Parser` and `ExpressionBuilder` classes. The `Parser` class recognizes parenthesis when it is parsing through the inputted string and creates its own string out of each parenthesis and adds it to its `vector<string>`. When the `ExpressionBuilder` class comes across this precedence operator, it adds everything between each parenthesis and recursively builds that subtree based off of its position in the command tree.  
+Precedence operators `(`,`)` guide the affect `Operators`, controlling the logical flow of the command sequence. This precedece is implemented through both our, `Parser` and `ExpressionBuilder` classes. The `Parser` class recognizes parenthesis when it is parsing through the inputted string and creates its own string out of each parenthesis and adds it to its `vector<string>`. When the `ExpressionBuilder` class comes across this precedence operator, it adds everything between each parenthesis and recursively builds that subtree based off of its position in the command tree.  
 
 ![PrecedenceDiagram](https://github.com/cs100/assignment-1-team-7-1/blob/master/images/rshell_precedence_tree_structure.png)
 
 ## Known Bugs
 
 1. Calling the exit command after a command fails, will not exit the program. The user has to type exit another time.
-2. Calling a command with any sqaure brackets, parenthesis, semicolon, or, or and keyword will not work properly, such as `echo ;` will not print out a `;` and will treat it like an empty echo command => `echo "";` .
+2. Calling a command with any sqaure brackets, parenthesis, semicolon, or, or and keyword will not work properly, such as `echo ;` will not print out a `;` and will treat it like an empty echo command `echo "";` .
