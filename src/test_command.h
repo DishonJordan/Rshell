@@ -18,45 +18,48 @@ class TestCommand : public Command {
 	 char* file_path = cmd.back();
 	 int result = stat(file_path, &buf);
 
-	
-	// Check for the directory flag
-        if (strcmp(cmd[1], "-d") == 0) {
-            if (S_ISDIR(buf.st_mode)) {
-                print_true();
-                return 1;
+	if(cmd.size() > 1){
+        // Check for the directory flag
+            if (strcmp(cmd[1], "-d") == 0) {
+                if (S_ISDIR(buf.st_mode)) {
+                    print_true();
+                    return 1;
+                }
+                else {
+                    print_false();
+                    return 0;
+                }
             }
-            else {
-                print_false();
-                return 0;
-            }
-        }
 
-        // Check for the regular file flag
-        else if (strcmp(cmd[1], "-f") == 0) {
-            if (S_ISREG(buf.st_mode)) {
-                print_true();
-                return 1;
+            // Check for the regular file flag
+            else if (strcmp(cmd[1], "-f") == 0) {
+                if (S_ISREG(buf.st_mode)) {
+                    print_true();
+                    return 1;
+                }
+                else {
+                    print_false();
+                    return 0;
+                }
             }
-            else {
-                print_false();
-                return 0;
-            }
-        }
 
-        // Default to -e flag if not specified
-        else {
-            if (result == 0) {
-                print_true();
-                return 1;
-            }
+            // Default to -e flag if not specified
             else {
-                print_false();
-                return 0;
+                if (result == 0) {
+                    print_true();
+                    return 1;
+                }
+                else {
+                    print_false();
+                    return 0;
+                }
             }
-        }
 
-        return 1; // If this point is reached, the test must have passed
-	
+            return 1; // If this point is reached, the test must have passed
+     }else{
+        std::cout << "ERROR: TEST COMMAND NOT VALID" << endl;
+	return 0;
+     }
     }
 
     // Print methods 
