@@ -13,7 +13,7 @@ In utilizing the composite design pattern, we built a `Base` class with two subc
 
 ![Flow Diagram](https://github.com/cs100/assignment-1-team-7-1/blob/master/images/rshell_tree_structure.png)
 
-## Classes
+## Precedence Operators
 
 ![PrecedenceDiagram](https://github.com/cs100/assignment-1-team-7-1/blob/master/images/rshell_precedence_tree_structure.png)
 
