@@ -13,6 +13,10 @@ In utilizing the composite design pattern, we built a `Base` class with two subc
 
 ![Flow Diagram](https://github.com/cs100/assignment-1-team-7-1/blob/master/images/rshell_tree_structure.png)
 
+## Classes
+
+![PrecedenceDiagram](https://github.com/cs100/assignment-1-team-7-1/blob/master/images/rshell_precedence_tree_structure.png)
+
 ## Known Bugs
 
 1. Calling the exit command after a command fails, will not exit the program. The user has to type exit another time.
