@@ -49,15 +49,14 @@ private:
 
 			if (s.empty()) { //Base Case where the main stack is empty
 				
-				//Defining a new command and populating it based off of the temp stack
-						
-				if(temp.empty())
+
+				if(temp.empty()) //If temp is empty, we want CheckCommand to return the base command
 				  current.clear();
 				else
-				  current = temp.top();
+				  current = temp.top(); //If temp is nonempty, we want CheckCommand to run on it
 				
+				//Defining a new command and populating it based off of the temp stack
 				Command* last_command = CheckCommand(current);
-				
 				populateCommand(last_command, temp);
 
 				if (top == NULL) { //Case where there was no prior top, so we assign this new command to the top
@@ -67,7 +66,7 @@ private:
 					((Operator*&)top)->setLeftNode(last_command);
 				}
 
-				return; //Finished the leaf
+				return; //Finished the leaf command
 				
 			}
 
@@ -75,18 +74,19 @@ private:
 
 		}
 
-		if (isOperator(current)) { //Standard Operator Case
+		if (isOperator(current)) { //Case where operator is found
 			
+			//Defining a new Operator based off of current
 			Operator* op = CheckOperator(current);
 			
+			//If temp is empty, we want CheckCommand to return the base command
 			if(temp.empty())
 			  current.clear();
 			else
-			  current = temp.top();
+			  current = temp.top(); //If temp is nonempty, we want CheckCommand to run on it
 			
 			//Definining a new command and populating it based off of the temp stack
 			Command* cmd = CheckCommand(current);
-
 			populateCommand(cmd, temp);
 
 			//Setting the right node of the new operator to
@@ -161,12 +161,14 @@ private:
 					Operator* op = CheckOperator(s.top());
 					s.pop();
 					top = op;
+
 					if (!temp.empty())
 						add_children(temp, op->r_node); //Recursively build the right tree with the inner parenthesis
 
 					add_children(s, op->l_node); //Recursively build the left tree with the remainder of the stack
 				}
 				else if (s.empty()) { //Case where the commands in the parenthesis are the last commands
+
 					if (!temp.empty())
 						add_children(temp, top); //Recursively build the last command in the parenthesis
 
@@ -217,6 +219,7 @@ private:
 
 	}
 
+	//Compare the string to our commands and returns a Command* of that type
 	Command* CheckCommand(string s) {
 
 		if (s.compare("test") == 0) {
