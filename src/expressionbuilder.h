@@ -7,8 +7,11 @@
 #include "command.h"
 #include "semicolon.h"
 #include "and.h"
-#include "test_command.h"
 #include "or.h"
+#include "iredirect.h"
+#include "oredirect.h"
+#include "doubleoredirect.h"
+#include "test_command.h"
 #include <stack>  
 
 using namespace std;
@@ -212,6 +215,18 @@ private:
 		else if (s.compare("||") == 0) {
 			return new Or();
 		}
+		else if(s.compare("<") == 0){
+			cout << "Creating I Redirect" << endl;
+			return new IRedirect();
+		}
+		else if(s.compare(">") == 0){
+			cout << "Creating O Redirect" << endl;
+			return new ORedirect();
+		}
+		else if(s.compare(">>") == 0){
+			cout << "Creating Double O Redirect" << endl;
+			return new DoubleORedirect();
+		}
 		else {
 			cout << s << " Did not match any Operator. Returning default." << endl;
 			return new Operator;
@@ -234,7 +249,7 @@ private:
 	//Checks to see if a string is a standard operator and returns true or false;
 	bool isOperator(string s) {
 
-		if (s.compare(";") == 0 || s.compare("&&") == 0 || s.compare("||") == 0) {
+		if (s.compare(";") == 0 || s.compare("&&") == 0 || s.compare("||") == 0 || s.compare("<") == 0 || s.compare(">") == 0 || s.compare(">>") == 0) {
 			return true;
 		}
 		return false;
