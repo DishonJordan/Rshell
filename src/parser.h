@@ -42,11 +42,11 @@ public:
 
 		}
 
-		//Prints output for verification
-	/*	for (int i = 0; i < output.size(); i++)
+/*		//Prints output for verification
+		for (int i = 0; i < output.size(); i++)
 			cout <<"[" << output[i] << "]";
 		cout << endl;
-	*/	
+*/		
 		return output;
 	
 
