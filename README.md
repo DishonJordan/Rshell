@@ -23,3 +23,4 @@ Precedence operators `(`,`)` guide the affect `Operators`, controlling the logic
 
 1. Calling the exit command after a command fails, will not exit the program. The user has to type exit another time.
 2. Calling a command with any sqaure brackets, parenthesis, semicolon, or, or and keyword will not work properly, such as `echo ;` will not print out a `;` and will treat it like an empty echo command `echo "";` .
+3. Chaining pipes and redirects currently are not working
