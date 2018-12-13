@@ -11,6 +11,7 @@
 #include "iredirect.h"
 #include "oredirect.h"
 #include "doubleoredirect.h"
+#include "pipe.h"
 #include "test_command.h"
 #include <stack>  
 
@@ -216,16 +217,16 @@ private:
 			return new Or();
 		}
 		else if(s.compare("<") == 0){
-			cout << "Creating I Redirect" << endl;
 			return new IRedirect();
 		}
 		else if(s.compare(">") == 0){
-			cout << "Creating O Redirect" << endl;
 			return new ORedirect();
 		}
 		else if(s.compare(">>") == 0){
-			cout << "Creating Double O Redirect" << endl;
 			return new DoubleORedirect();
+		}
+		else if(s.compare("|") == 0){
+			return new Pipe();
 		}
 		else {
 			cout << s << " Did not match any Operator. Returning default." << endl;
@@ -249,7 +250,10 @@ private:
 	//Checks to see if a string is a standard operator and returns true or false;
 	bool isOperator(string s) {
 
-		if (s.compare(";") == 0 || s.compare("&&") == 0 || s.compare("||") == 0 || s.compare("<") == 0 || s.compare(">") == 0 || s.compare(">>") == 0) {
+		if (s.compare(";") == 0 || s.compare("&&") == 0 || 
+			s.compare("||") == 0 || s.compare("<") == 0 || 
+			s.compare(">") == 0 || s.compare(">>") == 0 ||
+			s.compare("|") == 0) {
 			return true;
 		}
 		return false;

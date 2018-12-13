@@ -49,19 +49,21 @@ class Command : public Base {
             if (pid == 0) {  // Override the child process with execvp syscall
                 switch(redirector){
                     case 0: // Input redirect case
-                        cout << "INPUT REDIRECT DETECTED" << endl;
+
                         if(dup2(file_loc,0) < 0){
                             perror("dup ERROR");
                             return false;
                         }
                         break;
+
                     case 1: //Output redirect case
+
                         if(dup2(file_loc,1) < 0){
-                             cout << "OUTPUT REDIRECT DETECTED" << endl;
                             perror("dup ERROR");
                             return false;
                         }
                         break;
+                        
                     default: ;
                 }
 
