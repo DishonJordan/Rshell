@@ -5,7 +5,7 @@ This Rshell program processes commands entered by the user and executes them sim
 $ executable [argumentList] [connector] [cmd] ...
 ```
 ## UML
-![UML Diagram](https://github.com/cs100/assignment-1-team-7-1/blob/master/images/rshell_uml_2.png)
+![UML Diagram](https://github.com/cs100/assignment-1-team-7-1/blob/master/images/rshell_uml_3.png)
 
 ## Classes
 
